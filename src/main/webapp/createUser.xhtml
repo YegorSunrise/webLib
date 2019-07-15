@@ -9,23 +9,39 @@
 </h:head>
 <h:body>
     <h:form>
-        <p:panel id="panelId" header="Create User with id #{cdiController.highestId + 1}">
+        <p:panel id="panelId" header="Create User with id #{cdiUserController.highestId + 1}">
 
-            Name: <p:inputText value="#{cdiController.fullName}"/>
+            Name: <p:inputText value="#{cdiUserController.user.fullName}" style="margin-right: 40px"/>
             <p/>
-            Login: <p:inputText value="#{cdiController.login}"/>
+            Login: <p:inputText value="#{cdiUserController.user.login}" style="margin-right: 40px"/>
             <p/>
-            Pass: <p:inputText value="#{cdiController.pass}"/>
+            Pass: <p:inputText value="#{cdiUserController.user.pass}" style="margin-right: 40px"/>
             <p/>
-            <p:commandButton value="Add user" action="#{cdiController.createUser}" update="usersList, panelId"
+            <p:commandButton value="Add user" action="#{cdiUserController.createUser}" update="usersList, panelId"
                              style="margin-right: 20px"/>
-            <p:commandButton value="clear table" action="#{cdiController.clearUsers}" update="usersList, panelId"/>
+            <p:commandButton value="clear table" action="#{cdiUserController.clearUsers}" update="usersList, panelId, bookList"
+                             style="margin-right: 40px"/>
+            <p:commandButton value="populate db" action="#{cdiUserController.populate}" update="usersList, panelId, bookList"
+                             style="margin-right: 10px"/>
+            Users amount: <p:inputText value="#{cdiUserController.usersAmount}" style="margin-right: 10px"/>
+            Books amount: <p:inputText value="#{cdiUserController.booksAmount}" style="margin-right: 10px"/>
         </p:panel>
     </h:form>
 
 
-    <p:dataTable value="#{cdiController.usersList}" var="user" id="usersList">
-        <p:column headerText="Id">
+    <h:form>
+        <p:growl id="msgs" showDetail="true"/>
+        <h:panelGrid columns="2" cellpadding="5">
+            <p:outputLabel value="User: "/>
+            <p:autoComplete dropdown="true" value="#{cdiUserController.userFullName}" completeMethod="#{cdiUserController.fullNameList()}"/>
+        </h:panelGrid>
+    </h:form>
+
+
+    <p:dataTable id="usersList" value="#{cdiUserController.usersList}" var="user" lazy="true"
+                 paginator="true" rows="5" rowsPerPageTemplate="5,10,15" paginatorAlwaysVisible="false">
+
+        <p:column headerText="User Id">
             <h:outputText value="#{user.id}"/>
         </p:column>
 
@@ -41,6 +57,29 @@
             <h:outputText value="#{user.pass}"/>
         </p:column>
     </p:dataTable>
+
+    <p:separator />
+
+    <p:dataTable id="bookList" value="#{cdiBookController.booksList}" var="book" lazy="true"
+                 paginator="true" rows="5" rowsPerPageTemplate="5,10,15" paginatorAlwaysVisible="false">
+
+        <p:column headerText="Book Id">
+            <h:outputText value="#{book.id}"/>
+        </p:column>
+
+        <p:column headerText="Date">
+            <h:outputText value="#{book.date}"/>
+        </p:column>
+
+        <p:column headerText="Title">
+            <h:outputText value="#{book.title}"/>
+        </p:column>
+
+        <p:column headerText="Book User Id">
+            <h:outputText value="#{book.user.id}"/>
+        </p:column>
+    </p:dataTable>
+
 
 </h:body>
 
