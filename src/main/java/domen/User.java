@@ -1,14 +1,12 @@
 package domen;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = "id")
 @Entity
@@ -29,6 +27,11 @@ public class User {
         this.fullName = fullName;
         this.login = login;
         this.pass = pass;
+    }
+
+    @Override
+    public String toString() {
+        return id.toString();
     }
 }
 

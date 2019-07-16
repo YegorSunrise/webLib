@@ -5,11 +5,12 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = {"id","user"})
+@EqualsAndHashCode(exclude = {"id", "user"})
 @Entity
 public class Book {
 
@@ -18,13 +19,13 @@ public class Book {
     private Integer id;
 
     private String title;
-    private LocalDateTime date;
+    private Date date;
 
     @ManyToOne
     @JoinColumn(name = "bookUser", nullable = false)
     private User user;
 
-    public Book(String title, LocalDateTime date, User user) {
+    public Book(String title, Date date, User user) {
         this.title = title;
         this.date = date;
         this.user = user;

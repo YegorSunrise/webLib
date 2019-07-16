@@ -1,86 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+<html
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core">
 <h:head>
     <title>Create User</title>
 </h:head>
 <h:body>
     <h:form>
-        <p:panel id="panelId" header="Create User with id #{cdiUserController.highestId + 1}">
-
-            Name: <p:inputText value="#{cdiUserController.user.fullName}" style="margin-right: 40px"/>
-            <p/>
-            Login: <p:inputText value="#{cdiUserController.user.login}" style="margin-right: 40px"/>
-            <p/>
-            Pass: <p:inputText value="#{cdiUserController.user.pass}" style="margin-right: 40px"/>
-            <p/>
-            <p:commandButton value="Add user" action="#{cdiUserController.createUser}" update="usersList, panelId"
-                             style="margin-right: 20px"/>
-            <p:commandButton value="clear table" action="#{cdiUserController.clearUsers}" update="usersList, panelId, bookList"
-                             style="margin-right: 40px"/>
-            <p:commandButton value="populate db" action="#{cdiUserController.populate}" update="usersList, panelId, bookList"
-                             style="margin-right: 10px"/>
-            Users amount: <p:inputText value="#{cdiUserController.usersAmount}" style="margin-right: 10px"/>
-            Books amount: <p:inputText value="#{cdiUserController.booksAmount}" style="margin-right: 10px"/>
-        </p:panel>
+        <p:commandButton value="populate db" action="#{populate.populate()}" update="bookList"
+                         style="margin-right: 10px"/>
+        Users amount: <p:inputText value="#{populate.usersAmount}" style="margin-right: 10px"/>
+        Books amount: <p:inputText value="#{populate.booksAmount}" style="margin-right: 10px"/>
+        <p:commandButton value="clear table" action="#{backingUserBean.clearTables()}"
+                         update="bookList"
+                         style="margin-right: 40px"/>
     </h:form>
-
 
     <h:form>
-        <p:growl id="msgs" showDetail="true"/>
-        <h:panelGrid columns="2" cellpadding="5">
-            <p:outputLabel value="User: "/>
-            <p:autoComplete dropdown="true" value="#{cdiUserController.userFullName}" completeMethod="#{cdiUserController.fullNameList()}"/>
-        </h:panelGrid>
+        <p:outputLabel value="User: "/>
+        <p:autoComplete dropdown="true" value="#{backingBookBean.bookUser}"
+                        completeMethod="#{backingUserBean.getUsersList()}"
+                        var="user" itemLabel="#{user.fullName}" itemValue="#{user.id}" converter="#{userConverter}"
+                        style="margin-right: 10px"/>
+
+
+        <p:outputLabel value="From: "/>
+        <p:datePicker value="#{backingBookBean.fromDate}" style="margin-right: 10px"/>
+        <p:outputLabel value="to: "/>
+        <p:datePicker value="#{backingBookBean.toDate}"/>
+        <p></p>
+        <p:commandButton value="search" action="#{backingBookBean.searchedBooks()}" update="bookList"/>
     </h:form>
 
 
-    <p:dataTable id="usersList" value="#{cdiUserController.usersList}" var="user" lazy="true"
+    <p:dataTable id="bookList" value="#{backingBookBean.booksList()}" var="book"
                  paginator="true" rows="5" rowsPerPageTemplate="5,10,15" paginatorAlwaysVisible="false">
 
-        <p:column headerText="User Id">
-            <h:outputText value="#{user.id}"/>
+        <f:facet name="header">Books</f:facet>
+        <!--<p:ajax event="sort" skipChildren="false"/>-->
+        <p:column headerText="Book Id" sortBy="#{book.id}">
+            <p:inputText value="#{book.id}"/>
         </p:column>
-
-        <p:column headerText="Full Name">
-            <h:outputText value="#{user.fullName}"/>
+        <p:column headerText="Title" sortBy="#{book.title}">
+            <p:inputText value="#{book.title}"/>
         </p:column>
-
-        <p:column headerText="Login">
-            <h:outputText value="#{user.login}"/>
+        <p:column headerText="Date" sortBy="#{book.date}">
+            <p:inputText value="#{book.date}"/>
         </p:column>
-
-        <p:column headerText="pass">
-            <h:outputText value="#{user.pass}"/>
-        </p:column>
-    </p:dataTable>
-
-    <p:separator />
-
-    <p:dataTable id="bookList" value="#{cdiBookController.booksList}" var="book" lazy="true"
-                 paginator="true" rows="5" rowsPerPageTemplate="5,10,15" paginatorAlwaysVisible="false">
-
-        <p:column headerText="Book Id">
-            <h:outputText value="#{book.id}"/>
-        </p:column>
-
-        <p:column headerText="Date">
-            <h:outputText value="#{book.date}"/>
-        </p:column>
-
-        <p:column headerText="Title">
-            <h:outputText value="#{book.title}"/>
-        </p:column>
-
-        <p:column headerText="Book User Id">
-            <h:outputText value="#{book.user.id}"/>
+        <p:column headerText="Book User Id" sortBy="#{book.user.id}">
+            <p:inputText value="#{book.user.id}"/>
         </p:column>
     </p:dataTable>
-
-
 </h:body>
 
 </html>
