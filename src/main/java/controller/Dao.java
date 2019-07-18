@@ -3,7 +3,6 @@ package controller;
 import domen.Book;
 import domen.User;
 
-import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -36,19 +35,51 @@ public class Dao {
     }
 
     public List<Book> getAllBooks() {
+        entityManager.clear();
         Query query = entityManager.createQuery("from Book");
+        List resultList = query.getResultList();
+        return resultList;
+    }
+
+    public List<Book> searchBooks(Integer bookUser, Date fromDate, Date toDate) {
+        entityManager.clear();
+        Query query = entityManager.createQuery("from Book where bookUser=:bookUser and date>=:fromDate and date<=:toDate");
+        query.setParameter("bookUser", bookUser);
+        query.setParameter("fromDate", fromDate);
+        query.setParameter("toDate", toDate);
         return query.getResultList();
     }
 
-    public List<Book> searchBooks(String bookUser, Date fromDate, Date toDate) {
-        System.out.println("-----------IN SEARCH BOOK METHOD---------------");
+    public int updateBookId(Object oldValue, Object newValue) {
+        entityManager.clear();
+        Query query = entityManager.createQuery("update Book set id=:newVal where id=:oldVal");
+        query.setParameter("newVal", newValue);
+        query.setParameter("oldVal", oldValue);
+        return query.executeUpdate();
+    }
 
-        Query query = entityManager.createQuery("from Book where bookUser=:bookUser and date>=:fromDate and date<=:toDate");
-        System.out.println("---------------QUERY SUCCESSFUL");
-        query.setParameter("bookUser",bookUser);
-        query.setParameter("fromDate",fromDate);
-        query.setParameter("toDate",toDate);
+    public int updateBookTitle(Object oldValue, Object newValue) {
+        entityManager.clear();
+        Query query = entityManager.createQuery("update Book set title=:newVal where title=:oldVal");
+        query.setParameter("newVal", newValue);
+        query.setParameter("oldVal", oldValue);
+        return query.executeUpdate();
+    }
 
-        return query.getResultList();
+    public int updateBookDate(Object oldValue, Object newValue) {
+        entityManager.clear();
+        Query query = entityManager.createQuery("update Book set date=:newVal where date=:oldVal");
+        query.setParameter("newVal", newValue);
+        query.setParameter("oldVal", oldValue);
+        return query.executeUpdate();
+    }
+
+    public int updateBookUser(Integer bookId, Object newValue) {
+        entityManager.clear();
+        User newUser = (User) newValue;
+        Query query = entityManager.createNativeQuery("UPDATE Book set bookUser=? where id=?");
+        query.setParameter(1, newUser.getId());
+        query.setParameter(2, bookId);
+        return query.executeUpdate();
     }
 }

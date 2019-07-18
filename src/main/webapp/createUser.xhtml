@@ -8,51 +8,101 @@
     <title>Create User</title>
 </h:head>
 <h:body>
-    <h:form>
-        <p:commandButton value="populate db" action="#{populate.populate()}" update="bookList"
-                         style="margin-right: 10px"/>
-        Users amount: <p:inputText value="#{populate.usersAmount}" style="margin-right: 10px"/>
-        Books amount: <p:inputText value="#{populate.booksAmount}" style="margin-right: 10px"/>
-        <p:commandButton value="clear table" action="#{backingUserBean.clearTables()}"
-                         update="bookList"
-                         style="margin-right: 40px"/>
-    </h:form>
+    <h:form id="form">
+        <p:growl id="msgs" showDetail="true" autoUpdate="true"/>
 
-    <h:form>
-        <p:outputLabel value="User: "/>
-        <p:autoComplete dropdown="true" value="#{backingBookBean.bookUser}"
+        <p:commandButton value="Заполнить базу" action="#{populate.populate()}" update="bookList"
+                         onclick="PF('booksTable').clearFilters()" style="margin-right: 10px"
+                         oncomplete="PF('booksTable').filter()"/>
+
+
+        Количество пользователей: <p:inputText value="#{populate.usersAmount}" style="margin-right: 10px"/>
+        Количество книг: <p:inputText value="#{populate.booksAmount}" style="margin-right: 10px"/>
+        <p:commandButton value="очистить базу" action="#{backingUserBean.clearTables()}"
+                         onclick="PF('booksTable').clearFilters()" update="bookList"
+                         style="float: right"
+                         oncomplete="PF('booksTable').filter()"/>
+        <p></p>
+        <p:outputLabel value="Пользователь: "/>
+        <p:autoComplete dropdown="true" value="#{backingBookBean.user}"
                         completeMethod="#{backingUserBean.getUsersList()}"
-                        var="user" itemLabel="#{user.fullName}" itemValue="#{user.id}" converter="#{userConverter}"
+                        var="user" itemLabel="#{user}" itemValue="#{user}" converter="#{userConverter}"
                         style="margin-right: 10px"/>
 
-
-        <p:outputLabel value="From: "/>
-        <p:datePicker value="#{backingBookBean.fromDate}" style="margin-right: 10px"/>
-        <p:outputLabel value="to: "/>
-        <p:datePicker value="#{backingBookBean.toDate}"/>
+        <p:outputLabel value="С: "/>
+        <p:calendar value="#{backingBookBean.fromDate}" navigator="true" pattern="dd-MM-yyyy" mask="true"
+                    style="margin-right: 10px"/>
+        <p:outputLabel value="По: "/>
+        <p:calendar value="#{backingBookBean.toDate}" navigator="true" pattern="dd-MM-yyyy" mask="true"
+                    style="margin-right: 10px"/>
         <p></p>
-        <p:commandButton value="search" action="#{backingBookBean.searchedBooks()}" update="bookList"/>
+        <p:commandButton value="поиск" action="#{backingBookBean.searchedBooks()}" update="bookList"
+                         onclick="PF('booksTable').clearFilters()" style="margin-right: 100px"
+                         oncomplete="PF('booksTable').filter()"/>
+
+
+        <p:commandButton value="все книги" action="#{backingBookBean.bookList()}" update="bookList"
+                         onclick="PF('booksTable').clearFilters()" style="float: right"
+                         oncomplete="PF('booksTable').filter()"/>
+        <p></p>
+
+        <p:dataTable id="bookList" value="#{backingBookBean.changedBookList()}" var="book" editable="true"
+                     editMode="cell" emptyMessage="записи не найдены." widgetVar="booksTable"
+                     dynamic="true" update="bookList" resizableColumns="true"
+                     paginator="true" paginatorAlwaysVisible="false" rows="10" filteredValue="#{backingBookBean.filteredBookList}">
+            <f:facet name="header">Книги</f:facet>
+            <p:separator style="width:500px;height:20px" />
+            <f:facet name="header">
+                <p:outputPanel>
+                    <h:outputText value="Поиск по всем полям:"/>
+                    <p:inputText id="globalFilter" onkeyup="PF('booksTable').filter()"/>
+                </p:outputPanel>
+            </f:facet>
+
+
+            <p:ajax event="cellEdit" listener="#{backingBookBean.onCellEdit}" update=":form:msgs"/>
+
+            <p:column headerText="код книги" sortBy="#{book.id}" filterBy="#{book.id}" filterStyle="display:none"
+                      onclick="PF('booksTable').clearFilters()">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{book.id}"/></f:facet>
+                    <f:facet name="input"><p:inputText value="#{book.id}" style="width:96%"/></f:facet>
+                </p:cellEditor>
+            </p:column>
+
+            <p:column headerText="название" sortBy="#{book.title}" filterBy="#{book.title}" filterStyle="display:none"
+                      onclick="PF('booksTable').clearFilters()">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{book.title}"/></f:facet>
+                    <f:facet name="input"><p:inputText value="#{book.title}" style="width:96%"/></f:facet>
+                </p:cellEditor>
+            </p:column>
+
+            <p:column headerText="дата" sortBy="#{book.date}" filterBy="#{book.date}" filterStyle="display:none"
+                      onclick="PF('booksTable').clearFilters()">
+                <p:cellEditor>
+                    <f:facet name="output">
+                        <h:outputText value="#{book.date}">
+                            <f:convertDateTime pattern="dd-MM-yyyy"/></h:outputText>
+                    </f:facet>
+                    <f:facet name="input"><p:calendar value="#{book.date}" navigator="true" pattern="dd-MM-yyyy"
+                                                      mask="true"/></f:facet>
+                </p:cellEditor>
+            </p:column>
+            <p:column headerText="код пользователя" sortBy="#{book.user.id}" filterBy="#{book.user.id}"
+                      filterStyle="display:none" onclick="PF('booksTable').clearFilters()">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{book.user.id}"/></f:facet>
+                    <f:facet name="input"><p:autoComplete dropdown="true" value="#{book.user}"
+                                                          completeMethod="#{backingUserBean.getUsersList()}"
+                                                          var="user" itemLabel="#{user}" itemValue="#{user.id}"
+                                                          converter="#{userConverter}"
+                                                          style="margin-right: 10px"/>
+                    </f:facet>
+                </p:cellEditor>
+            </p:column>
+        </p:dataTable>
     </h:form>
-
-
-    <p:dataTable id="bookList" value="#{backingBookBean.booksList()}" var="book"
-                 paginator="true" rows="5" rowsPerPageTemplate="5,10,15" paginatorAlwaysVisible="false">
-
-        <f:facet name="header">Books</f:facet>
-        <!--<p:ajax event="sort" skipChildren="false"/>-->
-        <p:column headerText="Book Id" sortBy="#{book.id}">
-            <p:inputText value="#{book.id}"/>
-        </p:column>
-        <p:column headerText="Title" sortBy="#{book.title}">
-            <p:inputText value="#{book.title}"/>
-        </p:column>
-        <p:column headerText="Date" sortBy="#{book.date}">
-            <p:inputText value="#{book.date}"/>
-        </p:column>
-        <p:column headerText="Book User Id" sortBy="#{book.user.id}">
-            <p:inputText value="#{book.user.id}"/>
-        </p:column>
-    </p:dataTable>
 </h:body>
 
 </html>

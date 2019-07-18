@@ -21,13 +21,8 @@ public class Book {
     private String title;
     private Date date;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "bookUser", nullable = false)
     private User user;
 
-    public Book(String title, Date date, User user) {
-        this.title = title;
-        this.date = date;
-        this.user = user;
-    }
 }

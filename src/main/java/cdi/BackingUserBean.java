@@ -3,7 +3,7 @@ package cdi;
 import controller.Dao;
 import domen.User;
 import lombok.Data;
-import util.GlobalList;
+import util.GlobalBookList;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
@@ -25,14 +25,14 @@ public class BackingUserBean implements Serializable {
     Dao dao;
 
     @EJB
-    GlobalList globalList;
+    GlobalBookList globalBookList;
 
     public List<User> getUsersList() {
         return dao.getAllUsers();
     }
 
     public void clearTables() {
-        globalList.setBooks(Collections.emptyList());
+        globalBookList.setBooks(Collections.emptyList());
         dao.clearTables();
     }
 

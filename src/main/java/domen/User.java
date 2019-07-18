@@ -1,6 +1,7 @@
 package domen;
 
 import lombok.*;
+import org.hibernate.annotations.Target;
 
 import javax.persistence.*;
 import java.util.List;
@@ -23,15 +24,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Book> books;
 
-    public User(String fullName, String login, String pass) {
-        this.fullName = fullName;
-        this.login = login;
-        this.pass = pass;
-    }
-
     @Override
     public String toString() {
-        return id.toString();
+        return fullName;
     }
 }
 

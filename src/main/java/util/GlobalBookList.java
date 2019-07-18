@@ -9,7 +9,7 @@ import javax.ejb.Singleton;
 import java.util.List;
 
 @Singleton
-public class GlobalList {
+public class GlobalBookList {
 
     @EJB
     Dao dao;
