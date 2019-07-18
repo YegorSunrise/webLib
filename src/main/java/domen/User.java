@@ -1,13 +1,11 @@
 package domen;
 
 import lombok.*;
-import org.hibernate.annotations.Target;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = "id")
 @Entity

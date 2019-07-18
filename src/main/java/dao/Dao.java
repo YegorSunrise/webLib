@@ -1,4 +1,4 @@
-package controller;
+package dao;
 
 import domen.Book;
 import domen.User;

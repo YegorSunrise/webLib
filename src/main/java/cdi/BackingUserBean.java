@@ -1,6 +1,6 @@
 package cdi;
 
-import controller.Dao;
+import dao.Dao;
 import domen.User;
 import lombok.Data;
 import util.GlobalBookList;
@@ -35,5 +35,4 @@ public class BackingUserBean implements Serializable {
         globalBookList.setBooks(Collections.emptyList());
         dao.clearTables();
     }
-
 }

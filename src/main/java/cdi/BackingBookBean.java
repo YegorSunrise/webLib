@@ -1,6 +1,6 @@
 package cdi;
 
-import controller.Dao;
+import dao.Dao;
 import domen.Book;
 import domen.User;
 import lombok.Data;
@@ -58,7 +58,6 @@ public class BackingBookBean implements Serializable {
         globalBookList.setBooks(dao.getAllBooks());
         clearFilter();
     }
-
 
     public void onCellEdit(CellEditEvent event) {
         Object oldValue = event.getOldValue();
@@ -135,7 +134,5 @@ public class BackingBookBean implements Serializable {
             dataTable.reset();
             PrimeFaces.current().ajax().update("form:bookList");
         }
-
     }
-
 }

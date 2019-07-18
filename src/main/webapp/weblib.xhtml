@@ -15,9 +15,10 @@
                          onclick="PF('booksTable').clearFilters()" style="margin-right: 10px"
                          oncomplete="PF('booksTable').filter()"/>
 
-
-        Количество пользователей: <p:inputText value="#{populate.usersAmount}" style="margin-right: 10px"/>
-        Количество книг: <p:inputText value="#{populate.booksAmount}" style="margin-right: 10px"/>
+        <p:outputLabel value="Количество пользователей: "/>
+        <p:inputText value="#{populate.usersAmount}" style="margin-right: 10px"/>
+        <p:outputLabel value="Количество книг: "/>
+        <p:inputText value="#{populate.booksAmount}" style="margin-right: 10px"/>
         <p:commandButton value="очистить базу" action="#{backingUserBean.clearTables()}"
                          onclick="PF('booksTable').clearFilters()" update="bookList"
                          style="float: right"
@@ -49,9 +50,8 @@
         <p:dataTable id="bookList" value="#{backingBookBean.changedBookList()}" var="book" editable="true"
                      editMode="cell" emptyMessage="записи не найдены." widgetVar="booksTable"
                      dynamic="true" update="bookList" resizableColumns="true"
-                     paginator="true" paginatorAlwaysVisible="false" rows="10" filteredValue="#{backingBookBean.filteredBookList}">
-            <f:facet name="header">Книги</f:facet>
-            <p:separator style="width:500px;height:20px" />
+                     paginator="true" paginatorAlwaysVisible="false" rows="10"
+                     filteredValue="#{backingBookBean.filteredBookList}">
             <f:facet name="header">
                 <p:outputPanel>
                     <h:outputText value="Поиск по всем полям:"/>

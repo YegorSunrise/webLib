@@ -1,6 +1,6 @@
 package util;
 
-import controller.Dao;
+import dao.Dao;
 import domen.User;
 
 import javax.ejb.EJB;
@@ -31,7 +31,6 @@ public class UserConverter implements Converter, Serializable {
         }
         return null;
     }
-
 
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {

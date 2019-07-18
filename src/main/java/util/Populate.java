@@ -1,6 +1,6 @@
 package util;
 
-import controller.Dao;
+import dao.Dao;
 import domen.Book;
 import domen.User;
 import lombok.Data;
