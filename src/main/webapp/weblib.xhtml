@@ -12,7 +12,7 @@
         <p:growl id="msgs" showDetail="true" autoUpdate="true"/>
 
         <p:commandButton value="Заполнить базу" action="#{populate.populate()}" update="bookList"
-                         onclick="PF('booksTable').clearFilters()" style="margin-right: 10px"
+                         style="margin-right: 10px"
                          oncomplete="PF('booksTable').filter()"/>
 
         <p:outputLabel value="Количество пользователей: "/>
@@ -20,7 +20,7 @@
         <p:outputLabel value="Количество книг: "/>
         <p:inputText value="#{populate.booksAmount}" style="margin-right: 10px"/>
         <p:commandButton value="очистить базу" action="#{dataBean.clearTables()}"
-                         onclick="PF('booksTable').clearFilters()" update="bookList"
+                         update="bookList"
                          style="float: right"
                          oncomplete="PF('booksTable').filter()"/>
         <p></p>
@@ -38,12 +38,12 @@
                     style="margin-right: 10px"/>
         <p></p>
         <p:commandButton value="поиск" action="#{dataBean.searchedLazyList()}" update="bookList"
-                         onclick="PF('booksTable').clearFilters()" style="margin-right: 100px"
+                         style="margin-right: 100px"
                          oncomplete="PF('booksTable').filter()"/>
 
 
         <p:commandButton value="все книги" action="#{dataBean.allBooks()}" update="bookList"
-                         onclick="PF('booksTable').clearFilters()" style="float: right"
+                         style="float: right"
                          oncomplete="PF('booksTable').filter()"/>
         <p></p>
 
@@ -67,12 +67,8 @@
 
             <p:ajax event="cellEdit" listener="#{dataBean.onCellEdit}" update=":form:msgs"/>
 
-            <p:column headerText="код книги" sortBy="#{book.id}" filterBy="#{book.id}" filterStyle="display:none"
-                      onclick="PF('booksTable').clearFilters()">
-                <p:cellEditor>
-                    <f:facet name="output"><h:outputText value="#{book.id}"/></f:facet>
-                    <f:facet name="input"><p:inputText value="#{book.id}" style="width:96%"/></f:facet>
-                </p:cellEditor>
+            <p:column headerText="код книги" sortBy="#{book.id}" filterBy="#{book.id}" filterStyle="display:none">
+                <h:outputText value="#{book.id}"/>
             </p:column>
 
             <p:column headerText="название" sortBy="#{book.title}" filterBy="#{book.title}" filterStyle="display:none"

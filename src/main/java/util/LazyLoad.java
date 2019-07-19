@@ -5,7 +5,7 @@ import domen.Book;
 import domen.User;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
-
+import util.LazySorter;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.*;

@@ -56,21 +56,9 @@ public class DataBean implements Serializable {
         Book book = context.getApplication().evaluateExpressionGet(context, "#{book}", Book.class);
         if (newValue != null && !newValue.equals(oldValue)) {
             switch (columnHeader) {
-                case "код книги":
-                    List<Integer> allBooksId = dao.getAllBooks().stream().map(Book::getId).collect(Collectors.toList());
-                    if (allBooksId.contains((Integer) newValue)) {
-                        updateRejected(newValue, " id уже существует");
-                        break;
-                    } else {
-                        int updateBookId = dao.updateBookId(oldValue, newValue);
-                        if (updateBookId > 0) {
-                            updateSuccessful(columnHeader.toLowerCase(), newValue, " изменен на ");
-                            break;
-                        }
-                    }
 
                 case "название":
-                    int updateBookTitle = dao.updateBookTitle(oldValue, newValue);
+                    int updateBookTitle = dao.updateBookTitle(book.getId(), newValue);
                     if (updateBookTitle > 0) {
                         updateSuccessful(oldValue, newValue, " изменено на ");
                         break;
@@ -79,10 +67,9 @@ public class DataBean implements Serializable {
                     }
 
                 case "дата":
-                    int updateBookDate = dao.updateBookDate(oldValue, newValue);
+                    int updateBookDate = dao.updateBookDate(book.getId(), newValue);
                     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
                     if (updateBookDate > 0) {
-
                         updateSuccessful(dateFormat.format(oldValue), dateFormat.format(newValue), " изменена на ");
                         break;
                     } else {

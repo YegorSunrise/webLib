@@ -30,7 +30,6 @@ public class Dao {
     }
 
     public List<Book> getAllBooks() {
-        entityManager.clear();
         Query query = entityManager.createQuery("from Book");
         List resultList = query.getResultList();
         return resultList;
@@ -56,7 +55,6 @@ public class Dao {
     }
 
     public List<Book> searchBooks(Integer bookUser, Date fromDate, Date toDate, int first, int pageSize) {
-        entityManager.clear();
         Query query = entityManager.createQuery("from Book where bookUser=:bookUser and date>=:fromDate and date<=:toDate");
         query.setParameter("bookUser", bookUser);
         query.setParameter("fromDate", fromDate);
@@ -66,32 +64,21 @@ public class Dao {
         return query.getResultList();
     }
 
-    public int updateBookId(Object oldValue, Object newValue) {
-        entityManager.clear();
-        Query query = entityManager.createQuery("update Book set id=:newVal where id=:oldVal");
+    public int updateBookTitle(Integer bookId, Object newValue) {
+        Query query = entityManager.createQuery("update Book set title=:newVal where id=:bookId");
         query.setParameter("newVal", newValue);
-        query.setParameter("oldVal", oldValue);
+        query.setParameter("bookId", bookId);
         return query.executeUpdate();
     }
 
-    public int updateBookTitle(Object oldValue, Object newValue) {
-        entityManager.clear();
-        Query query = entityManager.createQuery("update Book set title=:newVal where title=:oldVal");
+    public int updateBookDate(Integer bookId, Object newValue) {
+        Query query = entityManager.createQuery("update Book set date=:newVal where id=:bookId");
         query.setParameter("newVal", newValue);
-        query.setParameter("oldVal", oldValue);
-        return query.executeUpdate();
-    }
-
-    public int updateBookDate(Object oldValue, Object newValue) {
-        entityManager.clear();
-        Query query = entityManager.createQuery("update Book set date=:newVal where date=:oldVal");
-        query.setParameter("newVal", newValue);
-        query.setParameter("oldVal", oldValue);
+        query.setParameter("bookId", bookId);
         return query.executeUpdate();
     }
 
     public int updateBookUser(Integer bookId, Object newValue) {
-        entityManager.clear();
         User newUser = (User) newValue;
         Query query = entityManager.createNativeQuery("UPDATE Book set bookUser=? where id=?");
         query.setParameter(1, newUser.getId());
