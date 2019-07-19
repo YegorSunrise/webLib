@@ -20,11 +20,6 @@ public class Dao {
         entityManager.persist(user);
     }
 
-    public List<User> getAllUsers() {
-        Query query = entityManager.createQuery("from User");
-        return query.getResultList();
-    }
-
     public void clearTables() {
         entityManager.createNativeQuery("DELETE from Book").executeUpdate();
         entityManager.createNativeQuery("DELETE from User").executeUpdate();
@@ -41,12 +36,33 @@ public class Dao {
         return resultList;
     }
 
-    public List<Book> searchBooks(Integer bookUser, Date fromDate, Date toDate) {
+    public List<Book> findBooks(int first, int pageSize) {
+        Query query = entityManager.createQuery("select book from Book book");
+        query.setFirstResult(first);
+        query.setMaxResults(pageSize);
+        return query.getResultList();
+    }
+
+
+    public int getTotalBooksCount() {
+        Query query = entityManager.createQuery("Select count(book.id) From Book book");
+        return ((Long)query.getSingleResult()).intValue();
+    }
+
+
+    public List<User> getAllUsers() {
+        Query query = entityManager.createQuery("from User");
+        return query.getResultList();
+    }
+
+    public List<Book> searchBooks(Integer bookUser, Date fromDate, Date toDate, int first, int pageSize) {
         entityManager.clear();
         Query query = entityManager.createQuery("from Book where bookUser=:bookUser and date>=:fromDate and date<=:toDate");
         query.setParameter("bookUser", bookUser);
         query.setParameter("fromDate", fromDate);
         query.setParameter("toDate", toDate);
+        query.setFirstResult(first);
+        query.setMaxResults(pageSize);
         return query.getResultList();
     }
 

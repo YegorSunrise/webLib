@@ -11,7 +11,6 @@ import javax.inject.Named;
 import java.io.Serializable;
 import java.util.List;
 
-
 @Named
 public class UserConverter implements Converter, Serializable {
 

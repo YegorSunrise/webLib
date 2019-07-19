@@ -4,6 +4,7 @@ import dao.Dao;
 import domen.Book;
 import domen.User;
 import lombok.Data;
+import org.primefaces.model.LazyDataModel;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -19,12 +20,10 @@ public class Populate {
     @EJB
     Dao dao;
 
-    @EJB
-    GlobalBookList globalBookList;
-
     private User user = new User();
     private int usersAmount;
     private int booksAmount;
+    private LazyDataModel<Book> lazyModel = null;
 
     public void populate() {
         for (int i = 0; i < usersAmount; i++) {
@@ -43,7 +42,7 @@ public class Populate {
             book.setUser(usersList.get(new Random().nextInt(usersList.size())));
             dao.addBook(book);
         }
-        globalBookList.setBooks(dao.getAllBooks());
+        lazyModel = new LazyLoad(dao, false);
     }
 
     private static class InfoGenerator {

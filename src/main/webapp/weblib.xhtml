@@ -19,48 +19,53 @@
         <p:inputText value="#{populate.usersAmount}" style="margin-right: 10px"/>
         <p:outputLabel value="Количество книг: "/>
         <p:inputText value="#{populate.booksAmount}" style="margin-right: 10px"/>
-        <p:commandButton value="очистить базу" action="#{backingUserBean.clearTables()}"
+        <p:commandButton value="очистить базу" action="#{dataBean.clearTables()}"
                          onclick="PF('booksTable').clearFilters()" update="bookList"
                          style="float: right"
                          oncomplete="PF('booksTable').filter()"/>
         <p></p>
         <p:outputLabel value="Пользователь: "/>
-        <p:autoComplete dropdown="true" value="#{backingBookBean.user}"
-                        completeMethod="#{backingUserBean.getUsersList()}"
+        <p:autoComplete value="#{dataBean.user}"
+                        completeMethod="#{dataBean.getUsersList()}"
                         var="user" itemLabel="#{user}" itemValue="#{user}" converter="#{userConverter}"
                         style="margin-right: 10px"/>
 
         <p:outputLabel value="С: "/>
-        <p:calendar value="#{backingBookBean.fromDate}" navigator="true" pattern="dd-MM-yyyy" mask="true"
+        <p:calendar value="#{dataBean.fromDate}" navigator="true" pattern="dd-MM-yyyy" mask="true"
                     style="margin-right: 10px"/>
         <p:outputLabel value="По: "/>
-        <p:calendar value="#{backingBookBean.toDate}" navigator="true" pattern="dd-MM-yyyy" mask="true"
+        <p:calendar value="#{dataBean.toDate}" navigator="true" pattern="dd-MM-yyyy" mask="true"
                     style="margin-right: 10px"/>
         <p></p>
-        <p:commandButton value="поиск" action="#{backingBookBean.searchedBooks()}" update="bookList"
+        <p:commandButton value="поиск" action="#{dataBean.searchedLazyList()}" update="bookList"
                          onclick="PF('booksTable').clearFilters()" style="margin-right: 100px"
                          oncomplete="PF('booksTable').filter()"/>
 
 
-        <p:commandButton value="все книги" action="#{backingBookBean.bookList()}" update="bookList"
+        <p:commandButton value="все книги" action="#{dataBean.allBooks()}" update="bookList"
                          onclick="PF('booksTable').clearFilters()" style="float: right"
                          oncomplete="PF('booksTable').filter()"/>
         <p></p>
 
-        <p:dataTable id="bookList" value="#{backingBookBean.changedBookList()}" var="book" editable="true"
-                     editMode="cell" emptyMessage="записи не найдены." widgetVar="booksTable"
-                     dynamic="true" update="bookList" resizableColumns="true"
-                     paginator="true" paginatorAlwaysVisible="false" rows="10"
-                     filteredValue="#{backingBookBean.filteredBookList}">
+        <p:dataTable id="bookList" value="#{dataBean.lazyModel}" var="book" editable="true"
+                     editMode="cell" emptyMessage="записи не найдены."
+                     rowsPerPageTemplate="5,10,15"
+                     resizableColumns="true"
+                     widgetVar="booksTable"
+                     lazy="true"
+                     rows="5"
+                     paginator="true" paginatorAlwaysVisible="true"
+                     filteredValue="#{dataBean.filteredBookList}">
+
             <f:facet name="header">
                 <p:outputPanel>
-                    <h:outputText value="Поиск по всем полям:"/>
+                    <h:outputText value="Поиск по всем полям: "/>
                     <p:inputText id="globalFilter" onkeyup="PF('booksTable').filter()"/>
                 </p:outputPanel>
             </f:facet>
 
 
-            <p:ajax event="cellEdit" listener="#{backingBookBean.onCellEdit}" update=":form:msgs"/>
+            <p:ajax event="cellEdit" listener="#{dataBean.onCellEdit}" update=":form:msgs"/>
 
             <p:column headerText="код книги" sortBy="#{book.id}" filterBy="#{book.id}" filterStyle="display:none"
                       onclick="PF('booksTable').clearFilters()">
@@ -93,8 +98,8 @@
                       filterStyle="display:none" onclick="PF('booksTable').clearFilters()">
                 <p:cellEditor>
                     <f:facet name="output"><h:outputText value="#{book.user.id}"/></f:facet>
-                    <f:facet name="input"><p:autoComplete dropdown="true" value="#{book.user}"
-                                                          completeMethod="#{backingUserBean.getUsersList()}"
+                    <f:facet name="input"><p:autoComplete value="#{book.user}"
+                                                          completeMethod="#{dataBean.getUsersList()}"
                                                           var="user" itemLabel="#{user}" itemValue="#{user.id}"
                                                           converter="#{userConverter}"
                                                           style="margin-right: 10px"/>
