@@ -2,7 +2,6 @@ package dao;
 
 import domen.Book;
 import domen.User;
-import lombok.extern.slf4j.Slf4j;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -47,7 +46,7 @@ public class Dao {
 
     public int getTotalBooksCount() {
         Query query = entityManager.createQuery("Select count(book.id) From Book book");
-        return ((Long)query.getSingleResult()).intValue();
+        return ((Long) query.getSingleResult()).intValue();
     }
 
 
