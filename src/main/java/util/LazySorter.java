@@ -43,8 +43,8 @@ public class LazySorter implements Comparator<Book> {
             int value = ((Comparable) value1).compareTo(value2);
 
             return SortOrder.ASCENDING.equals(sortOrder) ? value : -1 * value;
-        } catch (Exception e) {
-            throw new RuntimeException();
+        } catch (IllegalAccessException | NoSuchFieldException e) {
+           throw new RuntimeException("LazySorter exception", e);
         }
     }
 }

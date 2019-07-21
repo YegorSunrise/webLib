@@ -3,6 +3,7 @@ package util;
 import dao.Dao;
 import domen.Book;
 import domen.User;
+import exception.FieldException;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 import util.LazySorter;
@@ -111,7 +112,8 @@ public class LazyLoad extends LazyDataModel<Book> {
                                 break;
                             }
                         }
-                    } catch (Exception e) {
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
                         match = false;
                     }
 

@@ -2,6 +2,7 @@ package dao;
 
 import domen.Book;
 import domen.User;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -23,6 +24,7 @@ public class Dao {
     public void clearTables() {
         entityManager.createNativeQuery("DELETE from Book").executeUpdate();
         entityManager.createNativeQuery("DELETE from User").executeUpdate();
+
     }
 
     public void addBook(Book book) {
